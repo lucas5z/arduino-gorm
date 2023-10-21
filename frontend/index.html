@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSON Example</title>
+</head>
+<body>
+    <h1>Información del Salon</h1>
+    <pre id="user-data"></pre>
+    <script>
+        // JavaScript para cargar y mostrar el JSON desde el servidor Go
+        fetch('/prueba')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('user-data').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    </script>
+</body>
+</html>
