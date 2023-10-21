@@ -1,21 +1,127 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>JSON Example</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Sistemas Digitales</title>
 </head>
+
 <body>
+    <section class="universidad">
+        <img src="epis.jpg" alt="">
+        <h1 class="u">Universidad Nacional</h1>
+        <h1 class="uni">Jose Maria Arguedas</h1>
+    </section>
+    
+
+    <h2>Información del Salon 204 </h2>
+    <section class="info">
+        <article id="door"></article>
+        <article id="light"></article>
+        <article id="person"></article>
+    </section>
+   
+
+    <!-- codigo js -->
+    <script src="app.js"></script>
+
+</body>
+
+<footer>
+    <div class="boton">
+        <a href="horario.html">Horario</a>
+    </div>
+</footer>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <body>
     <h1>Información del Salon</h1>
-    <pre id="user-data"></pre>
-    <script>
+
+
+    <article id="arduino"></article>
+    <article id="door">
+        <p>es</p>
+    </article>
+    <script>    
+        
         // JavaScript para cargar y mostrar el JSON desde el servidor Go
         fetch('/prueba')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('user-data').textContent = JSON.stringify(data, null, 2);
+                const dato=document.getElementById('arduino');
+                const door=document.getElementById('door');
+                //recogemos los datos
+                const puerta = data.puerta;
+                const luz = data.luz;
+                const persona = data.personas
+                
+                door.innerHTML = '';
+                if(puerta==='abierto'){
+                    door.innerHTML =`
+                    <div class="door-frame">
+                            <div class="door open">hola</div>
+                    </div> 
+                    `;
+                }else{
+
+                }
+
+                if(luz==="prendido"){
+
+                }else{
+                }
+                if(persona==="si"){
+
+                }else{
+
+                }   
+                const puertaElement = document.createElement('p')
+                puertaElement.textContent = `puerta: ${puerta}`;
+
+                const luzElement = document.createElement('p');
+                luzElement.textContent = `luz: ${luz}`;
+
+                const personaElement = document.createElement('p');
+                personaElement.textContent = `persomas: ${persona}`;
+
+                //agrea a arudino
+                dato.appendChild(puertaElement);
+                dato.appendChild(luzElement);
+                dato.appendChild(personaElement);
             })
             .catch(error => {
                 console.error('Error:', error);
             });
+
+        
     </script>
 </body>
-</html>
+ -->

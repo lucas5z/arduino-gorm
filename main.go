@@ -10,37 +10,10 @@ import (
 	"github.com/tarm/serial"
 )
 
-type User struct {
-	Puerta   string `json:"puerta"`
-	Lus      string `json:"luz"`
-	Personas string `json:"persona"`
-}
-
 type Datos struct {
 	Puerta   string `json:"puerta"`
 	Luz      string `json:"luz"`
 	Personas string `json:"personas"`
-}
-
-func GetUserJSON(w http.ResponseWriter, r *http.Request) {
-	c := &serial.Config{Name: "COM3", Baud: 9600}
-	s, err := serial.OpenPort(c)
-	if err != nil {
-		http.Error(w, "No se pudo abrir el archivo JSON", http.StatusInternalServerError)
-		return
-	}
-	defer s.Close()
-
-	var dato User
-
-	err = json.NewDecoder(s).Decode(&dato)
-	if err != nil {
-		http.Error(w, "No se pudo decodificar el JSON", http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(dato)
 }
 
 func main() {
