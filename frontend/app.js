@@ -62,5 +62,5 @@ function actualizarDatos() {
         });
 }
 
-// Actualizar los datos cada 5 segundos (5000 milisegundos)
-setInterval(actualizarDatos, 2000);
+// Actualizar los datos 
+setInterval(actualizarDatos, 1000);

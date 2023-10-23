@@ -1,32 +1,33 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/tarm/serial"
+	"github.com/lucas5z/arduino1/db"
+	"github.com/lucas5z/arduino1/models"
+	"github.com/lucas5z/arduino1/routes"
 )
 
-type Datos struct {
-	Puerta   string `json:"puerta"`
-	Luz      string `json:"luz"`
-	Personas string `json:"personas"`
-}
-
 func main() {
-	//go Open2()
+	//routes.Open2()
+	//db
+	db.Conex()
+	//db migracion
+	db.DB.AutoMigrate(&models.Datos{})
+
 	r := mux.NewRouter()
 
 	// Ruta para obtener el JSON del usuario
-	r.HandleFunc("/prueba", GetUserJSON1).Methods("GET")
+	r.HandleFunc("/prueba", routes.Get_arduinio).Methods("GET")
+	r.HandleFunc("/prueba", routes.Post_arduino).Methods("POST")
+	go Put_arduino_time() //PUT
 
 	// Ruta para servir el archivo HTML del frontend
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./frontend/")))
 
-	// Inicia el servidor en el puerto 8080
 	//port := "192.168.1.58:8000"
 	port := ":8000"
 	fmt.Printf("Servidor escuchando en el puerto %s...\n", port)
@@ -36,45 +37,10 @@ func main() {
 	}
 }
 
-func Open2() {
-
-	c := &serial.Config{Name: "COM3", Baud: 9600}
-	s, err := serial.OpenPort(c)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer s.Close()
-
-	var datos Datos
-
-	decoder := json.NewDecoder(s)
-
+func Put_arduino_time() {
 	for {
-		err := decoder.Decode(&datos)
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Println(datos)
+		routes.Put_arduino(nil, nil)
+
+		time.Sleep(500 * time.Millisecond)
 	}
-}
-
-func GetUserJSON1(w http.ResponseWriter, r *http.Request) {
-	c := &serial.Config{Name: "COM3", Baud: 9600}
-	s, err := serial.OpenPort(c)
-	if err != nil {
-		http.Error(w, "No se pudo abrir el archivo JSON", http.StatusInternalServerError)
-		return
-	}
-	defer s.Close()
-
-	var dato Datos
-
-	err = json.NewDecoder(s).Decode(&dato)
-	if err != nil {
-		http.Error(w, "No se pudo decodificar el JSON", http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(dato)
 }
